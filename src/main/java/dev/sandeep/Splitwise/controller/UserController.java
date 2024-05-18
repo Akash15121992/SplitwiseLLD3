@@ -1,7 +1,9 @@
 package dev.sandeep.Splitwise.controller;
 
+import dev.sandeep.Splitwise.dto.UserLoginRequestDTO;
 import dev.sandeep.Splitwise.dto.UserRegistrationRequestDTO;
 import dev.sandeep.Splitwise.entity.User;
+import dev.sandeep.Splitwise.exception.UserLoginInvalidDataException;
 import dev.sandeep.Splitwise.exception.UserRegistrationInvalidDataException;
 import dev.sandeep.Splitwise.mapper.EntityDTOMapper;
 import dev.sandeep.Splitwise.service.UserService;
@@ -25,6 +27,15 @@ public class UserController {
       return ResponseEntity.ok(EntityDTOMapper.toDTO(savedUser));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody UserLoginRequestDTO userLoginRequestDTO){
+        validateUserLoginRequestDTO(userLoginRequestDTO);
+        User savedUser = userService.
+                login(userLoginRequestDTO.getEmail(), userLoginRequestDTO.getPassword());
+        return ResponseEntity.ok(EntityDTOMapper.toDTO(savedUser));
+
+    }
+
     private void validateUserRegistrationRequestDTO(UserRegistrationRequestDTO userRegistrationRequestDTO){
         //todo : validate if the emial is proper
         //todo : validate if password has 8 characters including a small,capital, numeric and special characters
@@ -32,7 +43,14 @@ public class UserController {
         userRegistrationRequestDTO.getName() == null ||
         userRegistrationRequestDTO.getPassword() == null){
             throw  new UserRegistrationInvalidDataException
-                    ("Invalid sign up data . Please fill feilds it cannot be null");
+                    ("Invalid sign up data . Please fill fields it cannot be null");
+        }
+    }
+
+    private void validateUserLoginRequestDTO(UserLoginRequestDTO userLoginRequestDTO){
+        if(userLoginRequestDTO.getEmail() == null||
+        userLoginRequestDTO.getPassword() == null){
+            throw new UserLoginInvalidDataException("Invalid login data. Please enter the correct credentials.");
         }
     }
 }

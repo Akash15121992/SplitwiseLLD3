@@ -17,6 +17,13 @@ public class SettlementTransaction extends BaseModel{
     private User lendor;
     private double amount;
     private Currency currency;
+
+    public SettlementTransaction(User borrower, User lendor, double amount) {
+        this.borrower = borrower;
+        this.lendor = lendor;
+        this.amount = amount;
+    }
+
     /*
       SettlementTransaction  User(Borrower/lendor)
        1                      1

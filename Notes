@@ -7,3 +7,74 @@
     * Group creation
     * adding an expense
     * settleUp
+
+One Way- Two Way mapping:
+
+One Way Mapping:
+1.Auditorium Seats
+
+fetch auditorium from DB -> fetch seats for that auditorium
+fetch seat from DB -> fetch the auditorium for that seat
+
+As option 1 is more likely we choose one way mapping ie Auditorium has seats
+
+class Auditorium {
+Seat seat;
+}
+
+class Seat{
+//does not have auditorium attribute
+}
+
+Two Way Mapping :
+Use Case : Red Bus
+
+2.User Booking
+User profile -> list of bookings
+Booking -> booked by some user
+
+class User{
+//both ethe class will have attribute of each other
+Booking booking;
+}
+
+class Booking{
+User user;
+}
+
+Splitwise:
+
+3.User Group
+
+User -> shows all the groups which user is part of
+Group -> shows all the users part of the group
+
+So this is two way mapping
+
+class User{
+ Group group;
+}
+
+class Group{
+  User user;
+}
+
+4.Group Expense
+
+Group -> in app group will have the expense details
+Expense -> in app expense will not have the group details . [not required]
+So this is one way mapping
+
+class Group{
+Expense expense;
+}
+
+class Expense{
+// does not have Group attribute
+}
+
+Two way mapping leads to often multiple table creation.In order to resolve it
+in a relationship we check who is the owner , like in user and group , group cant exist without an user,
+So user is owner we use @mappedBy annotation in this case.Here Group is the dependent side and User is
+the owning side so use (mappedBy =groups) attribute of the owning side in two way mapping.
+
